@@ -16,5 +16,6 @@ export const PRISMA_TOKEN = Symbol('PRISMA_TOKEN');
 			},
 		},
 	],
+	exports: [PRISMA_TOKEN],
 })
 export class PrismaModule {}
