@@ -1,4 +1,5 @@
-import { IsEmail, IsNotEmpty, IsString } from 'class-validator';
+import { IsEmail, IsNotEmpty, IsString, Matches } from 'class-validator';
+import { PASSWORD_ERROR_MESSAGE, PASSWORD_REGEX } from '@scribium/common';
 
 export class CreateUserDto {
 	@IsNotEmpty()
@@ -6,7 +7,7 @@ export class CreateUserDto {
 	email: string;
 
 	@IsNotEmpty()
-	@IsString() // TODO: PASSWORD REGEX
+	@Matches(PASSWORD_REGEX, { message: PASSWORD_ERROR_MESSAGE })
 	password: string;
 
 	@IsNotEmpty()
