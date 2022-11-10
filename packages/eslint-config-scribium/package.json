@@ -1,0 +1,11 @@
+{
+	"name": "@scribium/eslint-config-scribium",
+	"version": "0.0.0",
+	"main": "index.js",
+	"devDependencies": {
+		"eslint-config-prettier": "^8.5.0",
+		"eslint-plugin-prettier": "^4.2.1",
+		"@typescript-eslint/eslint-plugin": "^5.42.1",
+		"@typescript-eslint/parser": "^5.42.1"
+	}
+}
