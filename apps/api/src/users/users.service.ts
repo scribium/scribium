@@ -1,13 +1,13 @@
 import * as bcrypt from 'bcrypt';
 
 import { Inject, Injectable } from '@nestjs/common';
-import { PrismaClient } from '@prisma/client';
 import { PRISMA_TOKEN } from 'src/prisma/prisma.module';
 import { CreateUserDto } from './dto/create-user.dto';
 import { ConfigService } from '@nestjs/config';
 
 import type { AppUser } from './interfaces/app-user.interface';
 import type { AppConfigService } from 'src/app.types';
+import type { PrismaClient } from '@prisma/client';
 
 const include = { details: true } as const;
 
