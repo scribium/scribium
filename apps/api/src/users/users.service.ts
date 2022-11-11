@@ -27,7 +27,7 @@ export class UsersService {
 
 		// TODO: SEND EMAIL TO USER
 
-		const user = await this.prismaClient.user.create({
+		return await this.prismaClient.user.create({
 			data: {
 				email,
 				password: await this.hashPassword(password),
@@ -40,8 +40,6 @@ export class UsersService {
 			},
 			include,
 		});
-
-		return user;
 	}
 
 	private hashPassword(password: string): Promise<string> {
