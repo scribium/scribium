@@ -1,7 +1,4 @@
 {
 	"root": true,
-	"extends": ["next/core-web-vitals", "@scribium/scribium"],
-	"env": {
-		"browser": true
-	}
+	"extends": ["next/core-web-vitals", "@scribium/scribium"]
 }
