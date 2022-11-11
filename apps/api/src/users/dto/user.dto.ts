@@ -3,6 +3,6 @@ export class UserDto {
 	email: string;
 	details: Partial<{
 		firstName: string;
-		lastName?: string | null;
+		lastName: string | null;
 	}>;
 }
