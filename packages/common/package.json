@@ -1,0 +1,12 @@
+{
+	"name": "@scribium/common",
+	"version": "0.0.0",
+	"main": "dist/index.js",
+	"types": "dist/index.d.ts",
+	"scripts": {
+		"build": "tsc"
+	},
+	"devDependencies": {
+		"typescript": "^4.8.4"
+	}
+}
