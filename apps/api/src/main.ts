@@ -3,6 +3,7 @@ import { FastifyAdapter } from '@nestjs/platform-fastify';
 import { AppModule } from './app.module';
 import { ValidationPipe } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
+import { swaggerSetup } from './setups/swagger.setup';
 
 import type { NestFastifyApplication } from '@nestjs/platform-fastify';
 import type { AppConfigService } from './app.types';
@@ -12,6 +13,8 @@ async function bootstrap() {
 		AppModule,
 		new FastifyAdapter()
 	);
+
+	swaggerSetup(app);
 
 	const config = app.get<AppConfigService>(ConfigService);
 
