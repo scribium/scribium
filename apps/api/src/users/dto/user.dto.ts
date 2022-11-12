@@ -7,8 +7,9 @@ export class UserDto {
 	@ApiProperty({ example: 'john@gmail.com' })
 	email: string;
 
-	details: Partial<{
-		firstName: string;
-		lastName: string | null;
-	}>;
+	@ApiProperty({ example: 'John' })
+	firstName?: string;
+
+	@ApiProperty({ example: 'Smith' })
+	lastName?: string | null;
 }
