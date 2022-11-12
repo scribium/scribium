@@ -1,0 +1,12 @@
+{
+	"name": "@scribium/openapi-types",
+	"version": "0.0.0",
+	"main": "src/index.ts",
+	"types": "src/index.ts",
+	"scripts": {
+		"generate": "openapi-typescript http://localhost:8080/docs-json --output src/generated.ts"
+	},
+	"devDependencies": {
+		"openapi-typescript": "^5.4.1"
+	}
+}
