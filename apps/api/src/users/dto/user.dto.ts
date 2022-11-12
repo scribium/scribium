@@ -10,6 +10,9 @@ export class UserDto {
 	@ApiPropertyOptional({ example: 'John' })
 	firstName?: string;
 
-	@ApiPropertyOptional({ example: 'Smith' })
+	@ApiPropertyOptional({
+		example: 'Smith',
+		oneOf: [{ type: 'string' }, { type: 'null' }],
+	})
 	lastName?: string | null;
 }
