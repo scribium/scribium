@@ -12,7 +12,8 @@ export class UserDto {
 
 	@ApiPropertyOptional({
 		example: 'Smith',
-		oneOf: [{ type: 'string' }, { type: 'null' }],
+		type: String,
+		nullable: true,
 	})
 	lastName?: string | null;
 }
