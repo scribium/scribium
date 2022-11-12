@@ -2,10 +2,10 @@
 @tailwind components;
 @tailwind utilities;
 
-*,
-*::before,
-*::after {
-	padding: 0;
-	margin: 0;
-	box-sizing: border-box;
+@layer base {
+	*,
+	*::before,
+	*::after {
+		@apply p-0 m-0 box-border;
+	}
 }
