@@ -7,7 +7,7 @@ export const Header = () => (
 		<Link href="/">
 			<Image src={logo} alt="Scribium logo" width={60} />
 		</Link>
-		<nav className="space-x-5 uppercase text-sm hidden sm:block">
+		<nav className="space-x-5 uppercase text-sm hidden sm:block [&>a:hover]:no-underline">
 			<Link href="#">Home</Link>
 			<Link href="#">About us</Link>
 			<Link href="#">Our offer</Link>
