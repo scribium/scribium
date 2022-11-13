@@ -16,7 +16,7 @@ export const FooterCategory = ({ title, children }: Props) => (
 
 const Item = ({ title, path }: { title: string; path: string }) => (
 	<li className="mb-4">
-		<Link href={path} className="hover:underline">
+		<Link href={path} className="font-normal">
 			{title}
 		</Link>
 	</li>

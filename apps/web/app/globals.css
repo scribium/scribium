@@ -8,4 +8,8 @@
 	*::after {
 		@apply p-0 m-0 box-border;
 	}
+
+	a {
+		@apply font-medium hover:underline;
+	}
 }
