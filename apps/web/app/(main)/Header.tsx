@@ -12,7 +12,7 @@ export const Header = () => (
 			<Link href="#">About us</Link>
 			<Link href="#">Our offer</Link>
 			<Link
-				href="#"
+				href="/sign-up"
 				className="bg-primary text-white font-medium px-5 py-2.5 rounded-full"
 			>
 				Join now
