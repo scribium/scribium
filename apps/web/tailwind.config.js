@@ -1,5 +1,6 @@
-// eslint-disable-next-line @typescript-eslint/no-var-requires
+/* eslint-disable @typescript-eslint/no-var-requires */
 const { fontFamily } = require('tailwindcss/defaultTheme');
+const colors = require('tailwindcss/colors');
 
 /** @type {import('tailwindcss').Config} */
 module.exports = {
@@ -8,6 +9,9 @@ module.exports = {
 		extend: {
 			fontFamily: {
 				sans: ['var(--font-poppins)', ...fontFamily.sans],
+			},
+			colors: {
+				primary: colors.violet[900],
 			},
 		},
 	},
