@@ -11,7 +11,8 @@ import type { AppConfigService } from './app.types';
 async function bootstrap() {
 	const app = await NestFactory.create<NestFastifyApplication>(
 		AppModule,
-		new FastifyAdapter()
+		new FastifyAdapter(),
+		{ cors: true }
 	);
 
 	swaggerSetup(app);
