@@ -1,3 +1,5 @@
+import { forwardRef } from 'react';
+
 import type { InputHTMLAttributes, ReactNode } from 'react';
 
 type Props = Readonly<{
@@ -5,9 +7,18 @@ type Props = Readonly<{
 }> &
 	InputHTMLAttributes<HTMLInputElement>;
 
-export const Checkbox = ({ label, ...rest }: Props) => (
-	<label className="flex items-center text-gray-800">
-		<input type="checkbox" className="accent-primary mr-1.5" {...rest} />{' '}
-		{label}
-	</label>
+export const Checkbox = forwardRef<HTMLInputElement, Props>(
+	({ label, ...rest }, ref) => (
+		<label className="flex items-center text-gray-800">
+			<input
+				type="checkbox"
+				className="accent-primary mr-1.5"
+				ref={ref}
+				{...rest}
+			/>{' '}
+			{label}
+		</label>
+	)
 );
+
+Checkbox.displayName = 'Checkbox';
