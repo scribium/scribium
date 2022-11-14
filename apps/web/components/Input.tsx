@@ -1,4 +1,5 @@
 import { forwardRef, useId } from 'react';
+import { twMerge } from 'tailwind-merge';
 
 import type { InputHTMLAttributes } from 'react';
 import type { FieldError } from 'react-hook-form';
@@ -14,7 +15,7 @@ export const Input = forwardRef<HTMLInputElement, Props>(
 		const id = useId();
 
 		return (
-			<div className={`flex flex-col ${className}`}>
+			<div className={twMerge('flex flex-col', className)}>
 				<label
 					className="mb-2 tracking-wide text-gray-700 text-xs font-bold uppercase"
 					htmlFor={id}
