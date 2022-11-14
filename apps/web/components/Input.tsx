@@ -1,16 +1,16 @@
 import { forwardRef, useId } from 'react';
 
 import type { InputHTMLAttributes } from 'react';
+import type { FieldError } from 'react-hook-form';
 
 type Props = Readonly<{
 	label: string;
-	helperText?: string;
-	error?: boolean;
+	error?: FieldError;
 }> &
 	InputHTMLAttributes<HTMLInputElement>;
 
 export const Input = forwardRef<HTMLInputElement, Props>(
-	({ label, helperText, className, error, ...rest }, ref) => {
+	({ label, className, error, ...rest }, ref) => {
 		const id = useId();
 
 		return (
@@ -29,14 +29,8 @@ export const Input = forwardRef<HTMLInputElement, Props>(
 					ref={ref}
 					{...rest}
 				/>
-				{helperText && (
-					<p
-						className={`text-xs italic mt-3 ${
-							error ? 'text-red-500' : 'text-gray-600'
-						}`}
-					>
-						{helperText}
-					</p>
+				{error && (
+					<p className="text-xs italic mt-3 text-red-500">{error.message}</p>
 				)}
 			</div>
 		);
