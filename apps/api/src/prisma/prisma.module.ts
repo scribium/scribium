@@ -1,5 +1,7 @@
 import { Global, Module } from '@nestjs/common';
+import { APP_FILTER } from '@nestjs/core';
 import { PrismaClient } from '@prisma/client';
+import { PrismaExceptionFilter } from './prisma-exception-filter';
 
 export const PRISMA_TOKEN = Symbol('PRISMA_TOKEN');
 
@@ -14,6 +16,10 @@ export const PRISMA_TOKEN = Symbol('PRISMA_TOKEN');
 				await client.$connect();
 				return client;
 			},
+		},
+		{
+			provide: APP_FILTER,
+			useClass: PrismaExceptionFilter,
 		},
 	],
 	exports: [PRISMA_TOKEN],
