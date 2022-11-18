@@ -13,6 +13,7 @@ export default function SignUpPage() {
 		register,
 		handleFormSubmit,
 		formState: { errors },
+		isLoading,
 	} = useSignUpPage();
 
 	return (
@@ -25,6 +26,7 @@ export default function SignUpPage() {
 					linkTitle: 'Sign in',
 					linkPath: '/sign-in',
 				}}
+				loading={isLoading}
 				onSubmit={handleFormSubmit}
 			>
 				<Input

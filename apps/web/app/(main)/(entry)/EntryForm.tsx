@@ -11,6 +11,7 @@ type Props = Readonly<{
 		linkTitle: string;
 		linkPath: string;
 	};
+	loading?: boolean;
 	children: ReactNode;
 }> &
 	FormHTMLAttributes<HTMLFormElement>;
@@ -18,6 +19,7 @@ type Props = Readonly<{
 export const EntryForm = ({
 	buttonText,
 	helperText,
+	loading,
 	children,
 	...rest
 }: Props) => (
@@ -26,7 +28,7 @@ export const EntryForm = ({
 		{...rest}
 	>
 		{children}
-		<Button>{buttonText}</Button>
+		<Button loading={loading}>{buttonText}</Button>
 		{helperText && (
 			<span className="text-gray-600 text-sm mt-1">
 				{helperText.title}{' '}
