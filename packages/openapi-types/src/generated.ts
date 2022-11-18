@@ -29,6 +29,11 @@ export interface components {
       /** @example Smith */
       lastName?: string | null;
     };
+    OpenAPIHttpException: {
+      statusCode: number;
+      message: string;
+      error?: string;
+    };
   };
 }
 
@@ -40,6 +45,11 @@ export interface operations {
       201: {
         content: {
           "application/json": components["schemas"]["UserDto"];
+        };
+      };
+      409: {
+        content: {
+          "application/json": components["schemas"]["OpenAPIHttpException"];
         };
       };
     };
