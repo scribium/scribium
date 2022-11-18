@@ -4,6 +4,8 @@ import { Inject, Injectable } from '@nestjs/common';
 import { PRISMA_TOKEN } from 'src/prisma/prisma.module';
 import { CreateUserDto } from './dto/create-user.dto';
 import { ConfigService } from '@nestjs/config';
+import { EventEmitter2 } from '@nestjs/event-emitter';
+import { createUserEvent, CreateUserEvent } from './events/create-user.event';
 
 import type { AppUser } from './interfaces/app-user.interface';
 import type { AppConfigService } from 'src/app.types';
@@ -15,7 +17,8 @@ const include = { details: true } as const;
 export class UsersService {
 	constructor(
 		@Inject(PRISMA_TOKEN) private readonly prismaClient: PrismaClient,
-		@Inject(ConfigService) private readonly configService: AppConfigService
+		@Inject(ConfigService) private readonly configService: AppConfigService,
+		private readonly eventEmitter: EventEmitter2
 	) {}
 
 	async createUser({
@@ -25,9 +28,7 @@ export class UsersService {
 	}: CreateUserDto): Promise<AppUser> {
 		const [firstName, lastName] = fullName.split(' ');
 
-		// TODO: SEND EMAIL TO USER
-
-		return await this.prismaClient.user.create({
+		const user = await this.prismaClient.user.create({
 			data: {
 				email,
 				password: await this.hashPassword(password),
@@ -40,6 +41,10 @@ export class UsersService {
 			},
 			include,
 		});
+
+		this.eventEmitter.emit(createUserEvent, new CreateUserEvent(user.id));
+
+		return user;
 	}
 
 	private hashPassword(password: string): Promise<string> {
