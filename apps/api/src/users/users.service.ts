@@ -6,6 +6,8 @@ import { CreateUserDto } from './dto/create-user.dto';
 import { ConfigService } from '@nestjs/config';
 import { EventEmitter2 } from '@nestjs/event-emitter';
 import { createUserEvent, CreateUserEvent } from './events/create-user.event';
+import { TokenRequestDto } from './token/token-request.dto';
+import { TokenService } from './token/token.service';
 
 import type { AppUser } from './interfaces/app-user.interface';
 import type { AppConfigService } from 'src/app.types';
@@ -18,7 +20,8 @@ export class UsersService {
 	constructor(
 		@Inject(PRISMA_TOKEN) private readonly prismaClient: PrismaClient,
 		@Inject(ConfigService) private readonly configService: AppConfigService,
-		private readonly eventEmitter: EventEmitter2
+		private readonly eventEmitter: EventEmitter2,
+		private readonly tokenService: TokenService
 	) {}
 
 	async createUser({
@@ -45,6 +48,17 @@ export class UsersService {
 		this.eventEmitter.emit(createUserEvent, new CreateUserEvent(user.id));
 
 		return user;
+	}
+
+	async activeUser({ token }: TokenRequestDto): Promise<void> {
+		const { userId } = this.tokenService.use('ACCOUNT', token);
+
+		await this.prismaClient.user.update({
+			where: { id: userId },
+			data: {
+				active: true,
+			},
+		});
 	}
 
 	private hashPassword(password: string): Promise<string> {
