@@ -2,7 +2,8 @@ import * as yup from 'yup';
 
 import { useYupForm } from 'hooks/useYupForm';
 import { PASSWORD_REGEX, PASSWORD_ERROR_MESSAGE } from '@scribium/common';
-import { useUser } from 'hooks/useUser';
+import { useFetcher } from 'hooks/useFetcher';
+import { createUser } from 'services/users.service';
 
 const schema = yup.object({
 	fullName: yup.string().required('Enter your first and last name'),
@@ -21,21 +22,21 @@ const schema = yup.object({
 });
 
 export const useSignUpPage = () => {
-	const { registerMutation } = useUser();
+	const { mutate, isLoading } = useFetcher(createUser);
 
 	const yupForm = useYupForm(schema, ({ email, password, fullName }) => {
-		registerMutation.mutate(
+		mutate(
 			{ email, password, fullName },
 			{
 				onSuccess: () => {
-					console.log('SUCCESS!');
+					yupForm.reset();
 				},
-				onError: () => {
-					console.log('ERROR!');
+				onError: ({ data: { message } }) => {
+					yupForm.setError('email', { message });
 				},
 			}
 		);
 	});
 
-	return { ...yupForm };
+	return { isLoading, ...yupForm };
 };
