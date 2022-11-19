@@ -7,6 +7,9 @@ export interface paths {
   "/users": {
     post: operations["UsersController_createUser"];
   };
+  "/users/activation": {
+    post: operations["UsersController_activeUser"];
+  };
 }
 
 export interface components {
@@ -34,6 +37,9 @@ export interface components {
       message: string;
       error?: string;
     };
+    TokenRequestDto: {
+      token: string;
+    };
   };
 }
 
@@ -56,6 +62,22 @@ export interface operations {
     requestBody: {
       content: {
         "application/json": components["schemas"]["CreateUserDto"];
+      };
+    };
+  };
+  UsersController_activeUser: {
+    parameters: {};
+    responses: {
+      204: never;
+      400: {
+        content: {
+          "application/json": components["schemas"]["OpenAPIHttpException"];
+        };
+      };
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["TokenRequestDto"];
       };
     };
   };
