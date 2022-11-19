@@ -2,6 +2,7 @@ import {
 	Catch,
 	ConflictException,
 	InternalServerErrorException,
+	NotFoundException,
 } from '@nestjs/common';
 import { ExceptionFilter } from '@nestjs/common/interfaces';
 import { Prisma } from '@prisma/client';
@@ -21,6 +22,8 @@ export class PrismaExceptionFilter implements ExceptionFilter<PrismaError> {
 				throw new ConflictException(
 					message.charAt(0).toUpperCase() + message.slice(1)
 				);
+			case 'P2025':
+				throw new NotFoundException();
 			default:
 				throw new InternalServerErrorException();
 		}
