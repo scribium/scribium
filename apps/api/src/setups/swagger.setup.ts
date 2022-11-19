@@ -9,7 +9,7 @@ export const swaggerSetup = (app: INestApplication) => {
 		.setVersion('1.0.0')
 		.setLicense('MIT', 'https://opensource.org/licenses/MIT')
 		.build();
-
 	const document = SwaggerModule.createDocument(app, config);
+
 	SwaggerModule.setup('docs', app, document);
 };
