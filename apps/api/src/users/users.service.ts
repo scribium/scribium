@@ -1,9 +1,14 @@
 import * as bcrypt from 'bcrypt';
 
-import { Inject, Injectable } from '@nestjs/common';
+import { BadRequestException, Inject, Injectable } from '@nestjs/common';
 import { PRISMA_TOKEN } from 'src/prisma/prisma.module';
 import { CreateUserDto } from './dto/create-user.dto';
 import { ConfigService } from '@nestjs/config';
+import { EventEmitter2 } from '@nestjs/event-emitter';
+import { createUserEvent, CreateUserEvent } from './events/create-user.event';
+import { TokenRequestDto } from './token/dto/token-request.dto';
+import { TokenService } from './token/token.service';
+import { TokenExpiredError } from './token/errors/token-expied.error';
 
 import type { AppUser } from './interfaces/app-user.interface';
 import type { AppConfigService } from 'src/app.types';
@@ -15,7 +20,9 @@ const include = { details: true } as const;
 export class UsersService {
 	constructor(
 		@Inject(PRISMA_TOKEN) private readonly prismaClient: PrismaClient,
-		@Inject(ConfigService) private readonly configService: AppConfigService
+		@Inject(ConfigService) private readonly configService: AppConfigService,
+		private readonly eventEmitter: EventEmitter2,
+		private readonly tokenService: TokenService
 	) {}
 
 	async createUser({
@@ -25,9 +32,7 @@ export class UsersService {
 	}: CreateUserDto): Promise<AppUser> {
 		const [firstName, lastName] = fullName.split(' ');
 
-		// TODO: SEND EMAIL TO USER
-
-		return await this.prismaClient.user.create({
+		const user = await this.prismaClient.user.create({
 			data: {
 				email,
 				password: await this.hashPassword(password),
@@ -40,6 +45,34 @@ export class UsersService {
 			},
 			include,
 		});
+
+		this.eventEmitter.emit(createUserEvent, new CreateUserEvent(user.id));
+
+		return user;
+	}
+
+	async deleteUser(id: number): Promise<AppUser> {
+		return await this.prismaClient.user.delete({ where: { id }, include });
+	}
+
+	async activeUser({ token }: TokenRequestDto): Promise<void> {
+		try {
+			const { userId } = this.tokenService.use('ACCOUNT', token);
+
+			await this.prismaClient.user.update({
+				where: { id: userId },
+				data: {
+					active: true,
+				},
+			});
+		} catch (err) {
+			if (err instanceof TokenExpiredError) {
+				await this.deleteUser(err.payload.userId);
+				throw new BadRequestException('Token expired.');
+			}
+
+			throw err;
+		}
 	}
 
 	private hashPassword(password: string): Promise<string> {
