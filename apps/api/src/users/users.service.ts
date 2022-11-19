@@ -1,13 +1,14 @@
 import * as bcrypt from 'bcrypt';
 
-import { Inject, Injectable } from '@nestjs/common';
+import { BadRequestException, Inject, Injectable } from '@nestjs/common';
 import { PRISMA_TOKEN } from 'src/prisma/prisma.module';
 import { CreateUserDto } from './dto/create-user.dto';
 import { ConfigService } from '@nestjs/config';
 import { EventEmitter2 } from '@nestjs/event-emitter';
 import { createUserEvent, CreateUserEvent } from './events/create-user.event';
-import { TokenRequestDto } from './token/token-request.dto';
+import { TokenRequestDto } from './token/dto/token-request.dto';
 import { TokenService } from './token/token.service';
+import { TokenExpiredError } from './token/errors/token-expied.error';
 
 import type { AppUser } from './interfaces/app-user.interface';
 import type { AppConfigService } from 'src/app.types';
@@ -50,15 +51,28 @@ export class UsersService {
 		return user;
 	}
 
-	async activeUser({ token }: TokenRequestDto): Promise<void> {
-		const { userId } = this.tokenService.use('ACCOUNT', token);
+	async deleteUser(id: number): Promise<AppUser> {
+		return await this.prismaClient.user.delete({ where: { id }, include });
+	}
 
-		await this.prismaClient.user.update({
-			where: { id: userId },
-			data: {
-				active: true,
-			},
-		});
+	async activeUser({ token }: TokenRequestDto): Promise<void> {
+		try {
+			const { userId } = this.tokenService.use('ACCOUNT', token);
+
+			await this.prismaClient.user.update({
+				where: { id: userId },
+				data: {
+					active: true,
+				},
+			});
+		} catch (err) {
+			if (err instanceof TokenExpiredError) {
+				await this.deleteUser(err.payload.userId);
+				throw new BadRequestException('Token expired.');
+			}
+
+			throw err;
+		}
 	}
 
 	private hashPassword(password: string): Promise<string> {

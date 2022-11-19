@@ -1,10 +1,14 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
-import { JsonWebTokenError } from 'jsonwebtoken';
+import {
+	JsonWebTokenError,
+	TokenExpiredError as JwtTokenExpiredError,
+} from 'jsonwebtoken';
+import { TokenExpiredError } from './errors/token-expied.error';
 
 type TokenType = 'ACCOUNT';
 
-interface Payload {
+export interface Payload {
 	type: TokenType;
 	userId: number;
 }
@@ -14,7 +18,7 @@ export class TokenService {
 	constructor(private readonly jwtService: JwtService) {}
 
 	sign(type: TokenType, userId: number): string {
-		return this.jwtService.sign({ type, userId } as Payload); // TOOD: expiresIn
+		return this.jwtService.sign({ type, userId }); // TOOD: expiresIn
 	}
 
 	// TODO: PUT TOKEN INTO REDIS
@@ -28,6 +32,10 @@ export class TokenService {
 
 			return payload;
 		} catch (err) {
+			if (err instanceof JwtTokenExpiredError) {
+				throw new TokenExpiredError(this.jwtService.decode(token) as Payload);
+			}
+
 			if (err instanceof JsonWebTokenError) {
 				throw new BadRequestException(err.message);
 			}
