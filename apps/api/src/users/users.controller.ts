@@ -5,6 +5,7 @@ import { UsersService } from './users.service';
 import {
 	ApiConflictResponse,
 	ApiCreatedResponse,
+	ApiNoContentResponse,
 	ApiTags,
 } from '@nestjs/swagger';
 import { OpenAPIHttpException } from 'src/common/exceptions/openapi-http.exception';
@@ -35,6 +36,7 @@ export class UsersController {
 
 	@Post('activation')
 	@HttpCode(HttpStatus.NO_CONTENT)
+	@ApiNoContentResponse()
 	async activeUser(@Body() tokenRequestDto: TokenRequestDto): Promise<void> {
 		await this.usersService.activeUser(tokenRequestDto);
 	}
