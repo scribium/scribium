@@ -22,7 +22,7 @@ model UserDetails {
   firstName String  @map("first_name")
   lastName  String? @map("last_name")
   user      User    @relation(fields: [userId], references: [id], onDelete: Cascade)
-  userId    Int     @unique
+  userId    Int     @unique @map("user_id")
 
   @@map("user_details")
 }
